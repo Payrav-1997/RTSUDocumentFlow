@@ -1,0 +1,60 @@
+@model DocumentFlow.Models.ViewModels.User.CreateUserViewModel
+
+@{
+    Layout = "_Layout";
+}
+<div class="mx-4">
+    <h1>Добавление пользователя</h1>
+
+    <form class="form-vertical" enctype="multipart/form-data" asp-action="Create" asp-controller="User" method="post">
+        <div style="color: red" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group mb-4">
+            <label class="control-label">ФИО:</label>
+            <input type="text" name="name" asp-for="Name" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Номер телефона:</label>
+            <input type="text" name="Phone" asp-for="Phone" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Адрес:</label>
+            <input type="text" name="address" asp-for="Address" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Почта:</label>
+            <input type="email" name="email" asp-for="Email" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Роль:</label>
+            <select asp-for="RoleId" class="custom-select mb-4">
+                @foreach (var role in Model.Roles)
+                {
+                    <option value="@(role.Id)">@role.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Отдел:</label>
+            <select asp-for="DepartmentId" class="custom-select mb-4">
+                @foreach (var department in Model.Departments)
+                {
+                    <option value="@(department.Id)">@department.Name</option>
+                }
+            </select>
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Пароль:</label>
+            <div class="input-group mb-4">
+                <input type="password" name="Password" asp-for="Password" class="form-control">
+                <span class="input-group-addon">
+                    <i class="icon-user"></i>
+                </span>
+            </div>
+        </div>
+        <div class="custom-file mb-4">
+            <input type="file" class="custom-file-input" asp-for="Logo" id="customFile">
+            <label class="custom-file-label" for="customFile">Файл</label>
+        </div>
+        <input type="submit" value="Добавить" class="btn btn-primary ml-3 mt-3">
+    </form>
+</div>
