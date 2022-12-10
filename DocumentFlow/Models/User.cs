@@ -1,6 +1,6 @@
 namespace DocumentFlow.Models;
 
-public class Users
+public class User
 {
     public Guid Id { get; set; }
     public Guid? DepartmentId { get; set; }
@@ -11,7 +11,7 @@ public class Users
     public string Email { get; set; }
     public string Address { get; set; }
     public DateTime CreatedAt { get; set; }
-    public Guid RolesId { get; set; }
-    public virtual Roles Roles { get; set; }
+    public int RoleId { get; set; }
+    public virtual Role Role { get; set; }
     public virtual Department? Department { get; set; }
 }

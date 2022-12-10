@@ -38,7 +38,7 @@ public class AuthController : BaseController
             ModelState.AddModelError("", "Логин или пароль не корректный!");
             return View(model);
         }
-        Authenticate(user.Phone, user.Id, user.Roles.Name);
+        Authenticate(user.Phone, user.Id, user.Role.Name);
         return Redirect("Statistics/StatisticsCount");
       
     }

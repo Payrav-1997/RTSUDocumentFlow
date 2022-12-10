@@ -9,9 +9,9 @@ public class CreateUserViewModel
     public string Email { get; set; }
     public string Address { get; set; }
 
-    public Guid RoleId { get; set; }
-    public Guid DepartmentId { get; set; }
+    public int RoleId { get; set; } = 2;
+    public Guid DepartmentId { get; set; } = new Guid("e7bf76fc-035a-4e5c-81ae-6492421107be");
 
-    public List<Roles> Roles{ get; set; }
+    public List<Role> Roles{ get; set; }
     public List<Models.Department> Departments { get; set; }
 }

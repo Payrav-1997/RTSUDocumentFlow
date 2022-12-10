@@ -24,16 +24,16 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var user in Model)
+            @foreach (var department in Model)
             {
                 <tr>
-                    <td>@user.Id</td>
-                    <td>@user.Name</td>
-                    <td>@user.CreatedAt</td>
-                    @if (user.UserRole.Equals("Админ"))
+                    <td>@department.Id</td>
+                    <td>@department.Name</td>
+                    <td>@department.CreatedAt</td>
+                    @if (department.UserRole.Equals("Админ"))
                       {
                           <td class="text-center">
-                              <a asp-action="GetById" asp-controller="User" asp-route-id="@user.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Подробно">
+                              <a asp-action="GetDepartmentUsers" asp-controller="Department" asp-route-id="@department.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Подробно">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
                                       <circle cx="12" cy="12" r="10"></circle>
                                   </svg>

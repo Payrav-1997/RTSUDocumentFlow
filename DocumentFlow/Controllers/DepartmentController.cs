@@ -51,7 +51,8 @@ public class DepartmentController : BaseController
             Id = x.Id,
             Name = x.Name,
             CreatedAt = x.CreatedAt,
-            UserRole = user!.Roles.Name
+            UserRole = user!.Role.Name,
+            UserId = user.Id
         }).ToList();
         return View(departments);
     }
@@ -60,9 +61,11 @@ public class DepartmentController : BaseController
     public async Task<IActionResult> GetDepartmentUsers(Guid id)
     {
         var userId = GetCurrentUserId();
+        var department = await _dataContext.Departments.FindAsync(id);
         var departmentUsers =  _dataContext.Users.Where(x =>x.Id != userId && x.DepartmentId.Equals(id))
             .Select(x => new GetDepartmentUsersDto()
             {
+                DepartmentName = department!.Name,
                 Id = x.Id,
                 Email = x.Email,
                 Logo = x.Logo,

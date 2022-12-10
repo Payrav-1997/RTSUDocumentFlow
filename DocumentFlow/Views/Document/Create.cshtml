@@ -1,0 +1,29 @@
+@model DocumentFlow.Models.ViewModels.Document.CreateDocumentViewModel
+
+@{
+    Layout = "_Layout";
+}
+<div class="mx-4" style="width: 50%;">
+    <h3>Добавление пользователя</h3>
+
+    <form class="form-vertical" enctype="multipart/form-data" asp-action="Create" asp-controller="Document" method="post">
+        <div style="color: red" asp-validation-summary="ModelOnly"></div>
+        <div class="form-group mb-4">
+            <label class="control-label">Коррреспондент:</label>
+            <input type="text" name="Correspondent" asp-for="Correspondent" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Тел коррреспондента:</label>
+            <input type="text" name="CorrespondentNumber" asp-for="CorrespondentNumber" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Тема:</label>
+            <input type="text" name="topic" asp-for="Topic" class="form-control">
+        </div>
+        <div class="form-group mb-4">
+            <label class="control-label">Тип документа:</label>
+            <input type="text" name="Type" asp-for="Type" class="form-control">
+        </div>
+        <input type="submit" value="Добавить" class="btn btn-primary ml-3 mt-3">
+    </form>
+</div>

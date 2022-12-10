@@ -1,0 +1,20 @@
+@model List<DocumentFlow.Models.ViewModels.Document.GetAllDocumentsViewModel>
+
+@{
+    Layout = "_Layout";
+}
+<div class="d-flex flex-wrap" >
+  @foreach (var doc in Model)
+  {
+      <div class="mx-4 py-2" style="width: 9%;">
+          <div class="card component-card_2">
+              <img src="~/defoultImage/PDF_file_icon.svg.png " width="40px" height="130px" class="card-img-top" alt="widget-card-2" >
+              <div class="card-body">
+                  <h5 class="card-title">@doc.Type</h5>
+                  @* <p class="card-text">Etiam sed augue ac justo tincidunt posuere. Vivamus euismod eros, nec risus malesuada.</p> *@
+                  <a asp-action="GetById" asp-controller="Document" asp-route-id="@doc.Id"class="btn btn-primary">Подробно</a>
+              </div>
+          </div>
+      </div>
+  }  
+</div>

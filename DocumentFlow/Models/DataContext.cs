@@ -7,22 +7,25 @@ public class DataContext : DbContext
     public DataContext(DbContextOptions options) : base(options)
     {
     }
-    public DbSet<Users> Users { get; set; }
-    public DbSet<Roles> Roles { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Role> Roles { get; set; }
     public DbSet<Status> Statuses { get; set; }
     public DbSet<Department> Departments { get; set; }
+    public DbSet<Document> Documents { get; set; }
+    public DbSet<Executor> Executors { get; set; }
+    public DbSet<Agreement> Agreements { get; set; }
 
     protected override void OnModelCreating(ModelBuilder model)
     {
-        model.Entity<Roles>().HasData(
-            new Roles()
+        model.Entity<Role>().HasData(
+            new Role()
             {
-                Id = new Guid("c226e52f-223d-4ddc-810c-d4f6b345f350"),
+                Id = 1,
                 Name = "Админ"
             },
-            new Roles()
+            new Role()
             {
-                Id = Guid.NewGuid(),
+                Id = 2,
                 Name = "Пользователь"
             }
         );
@@ -30,12 +33,12 @@ public class DataContext : DbContext
         model.Entity<Status>().HasData(
             new Status()
             {
-                Id = Guid.NewGuid(),
+                Id = 1,
                 Name = "Новый"
             },
             new Status()
             {
-                Id = Guid.NewGuid(),
+                Id = 2,
                 Name = "Одобренно"
             }
         );
@@ -47,16 +50,16 @@ public class DataContext : DbContext
                 CreatedAt = DateTime.UtcNow
             }
         );
-        model.Entity<Users>().HasData(
-            new Users()
+        model.Entity<User>().HasData(
+            new User()
             {
                 Id = Guid.NewGuid(),
                 Name = "Админ",
                 Address = "Test",
                 Email = "Admin@gmail.com",
-                Logo = string.Empty,
+                Logo = "user/638061145023499962thumb_1559_600_480_0_0_auto.jpg",
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
-                RolesId = new Guid("c226e52f-223d-4ddc-810c-d4f6b345f350"),
+                RoleId = 1,
                 Phone = "+992915224442",
                 CreatedAt = DateTime.UtcNow,
                 DepartmentId = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440")

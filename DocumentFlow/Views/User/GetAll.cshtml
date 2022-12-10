@@ -38,7 +38,14 @@
                     <td>@user.Departament</td>
                     <td class="text-center">
                         <span>
-                            <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
+                            @if (!string.IsNullOrEmpty(@user.Logo))
+                            {
+                                <img src="/@user.Logo" class="rounded-circle profile-img" alt="avatar">
+                            }
+                            @if (string.IsNullOrEmpty(@user.Logo))
+                            {
+                                <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
+                            }
                         </span>
                     </td>
                     <td class="text-center">

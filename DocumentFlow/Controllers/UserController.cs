@@ -31,12 +31,12 @@ public class UserController : BaseController
     public async Task<IActionResult> Create(CreateUserViewModel userViewModel)
     {
         var user = await GetByPhone(userViewModel.Phone);
-        if (user == null)
+        if (user != null)
         {
             ModelState.AddModelError("", "Такой пользователь уже существует!");
             return View(userViewModel);
         }
-        var newUser = new Users()
+        var newUser = new User()
         {
             Id = Guid.NewGuid(),
             Logo = await AddFileAsync(nameof(User),userViewModel.Logo),
@@ -46,14 +46,15 @@ public class UserController : BaseController
             Address = userViewModel.Address,
             Email = userViewModel.Email,
             CreatedAt = DateTime.UtcNow,
-            RolesId = new Guid($"{userViewModel.RoleId}")
+            RoleId = userViewModel.RoleId,
+            DepartmentId = userViewModel.DepartmentId
         };
         await _dataContext.Users.AddAsync(newUser);
         await _dataContext.SaveChangesAsync();
-        return View();
+        return RedirectToAction("GetAll","User");
     }
 
-    private async Task<Users?> GetByPhone(string phone)
+    private async Task<User?> GetByPhone(string phone)
     {
         var user = await _dataContext.Users.FirstOrDefaultAsync(x => x.Phone.Equals(phone));
         return user;
@@ -69,6 +70,9 @@ public class UserController : BaseController
         var fileName = string.Concat(DateTime.Now.Ticks, file.FileName);
         var filePath = Path.Combine(fileDirectory, fileName);
         await using var fs = new FileStream(filePath, FileMode.Create);
+        await file.CopyToAsync(fs);
+        await fs.FlushAsync();
+        fs.Close();
         return Path.Combine(dir,fileName);
     }
     
@@ -76,7 +80,7 @@ public class UserController : BaseController
     public async Task<IActionResult> GetById(Guid id)
     {
         var user = await _dataContext.Users.FirstOrDefaultAsync(x=>x.Id.Equals(id));
-        if (user == null)
+            if (user == null)
         {
             ModelState.AddModelError("", "Такой пользователь не существует!");
             return View();
@@ -86,7 +90,7 @@ public class UserController : BaseController
             Logo = user.Logo,
             Name = user.Name,
             Phone = user.Phone,
-            UserRole = user.Roles.Name,
+            UserRole = user.Role.Name,
             Address = user.Address,
             Email = user.Email,
             CreatedAt = user.CreatedAt,
@@ -105,7 +109,7 @@ public class UserController : BaseController
             Departament = x.Department!.Name,
             Logo = x.Logo,
             Name = x.Name,
-            UserRole = x.Roles.Name
+            UserRole = x.Role.Name
         }).ToList();
         return View(users);
     }

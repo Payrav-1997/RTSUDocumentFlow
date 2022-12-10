@@ -3,8 +3,8 @@
 @{
     Layout = "_Layout";
 }
-<div class="mx-4">
-    <h1>Добавление пользователя</h1>
+<div class="mx-4" style="width: 50%;">
+    <h3>Добавление пользователя</h3>
 
     <form class="form-vertical" enctype="multipart/form-data" asp-action="Create" asp-controller="User" method="post">
         <div style="color: red" asp-validation-summary="ModelOnly"></div>
@@ -27,9 +27,11 @@
         <div class="form-group mb-4">
             <label class="control-label">Роль:</label>
             <select asp-for="RoleId" class="custom-select mb-4">
-                @foreach (var role in Model.Roles)
-                {
-                    <option value="@(role.Id)">@role.Name</option>
+                @if(Model.Roles != null){
+                    @foreach (var role in Model.Roles)
+                    {
+                        <option value="@(role.Id)">@role.Name</option>
+                    }
                 }
             </select>
         </div>
