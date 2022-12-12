@@ -17,7 +17,7 @@ public class ExecutorController : BaseController
     public async Task<IActionResult> Create(Guid id)
     {
         var currentUserId = GetCurrentUserId();
-        var users = _dataContext.Users.Where(x=>x.Id != currentUserId).OrderBy(x=>x.CreatedAt).ToList();
+        var users = _dataContext.Users.Where(x=>x.Id != currentUserId && x.RoleId == 3).OrderBy(x=>x.CreatedAt).ToList();
         var executor = new CreateExecutorViewModel()
         {
             Users = users,
@@ -48,18 +48,29 @@ public class ExecutorController : BaseController
             };
             await _dataContext.AddAsync(executor);
             await _dataContext.SaveChangesAsync();
-            var notion = new Notion()
-            {
-                Id = Guid.NewGuid(),
-                Message = executor.Description,
-                UserId = userId
-            };
-            await _dataContext.AddAsync(notion);
-            await _dataContext.SaveChangesAsync();
+           await CreateNotion(userId, executor.DocumentId, executor.Description);
+           await ChangeDocumentStatus(executor.DocumentId);
         }
-
-       
-        
         return RedirectToAction("GetAll","Document");
+    }
+
+    private async Task ChangeDocumentStatus(Guid documentId)
+    {
+        var document = await _dataContext.Documents.FindAsync(documentId);
+        document!.StatusId = 2;
+        await _dataContext.SaveChangesAsync();
+    }
+
+    private async Task CreateNotion(Guid userId, Guid documentId, string description)
+    {
+        var notion = new Notion()
+        {
+            Id = Guid.NewGuid(),
+            Message = description,
+            UserId = userId,
+            DocumentId = documentId
+        };
+        await _dataContext.AddAsync(notion);
+        await _dataContext.SaveChangesAsync();
     }
 }
