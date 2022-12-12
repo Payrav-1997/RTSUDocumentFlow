@@ -9,5 +9,7 @@ public class GetDocumentDto
     public string Topic { get; set; }
     public string Correspondent { get; set; }
     public string CorrespondentNumber { get; set; }
+    public Guid CurrentUserId { get; set; }
     public DateTime CreatedAtCorrespondent { get; set; }
+    public List<Models.Executor> Executors { get; set; }
 }

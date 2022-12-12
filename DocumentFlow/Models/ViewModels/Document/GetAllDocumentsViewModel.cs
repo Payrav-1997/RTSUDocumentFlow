@@ -7,4 +7,5 @@ public class GetAllDocumentsViewModel
     public string Correspondent { get; set; }
     public int DocumentNumber { get; set; }
     public string Topic { get; set; }
+    public string Status { get; set; }
 }
