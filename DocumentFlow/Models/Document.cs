@@ -12,9 +12,10 @@ public class Document
     public DateTime CreatedAtCorrespondent { get; set; }
     public DateTime CreatedAt { get; set; }
     public virtual Status Status { get; set; }
-
     public Guid UserId { get; set; }
-
+    
+    
+    
     public virtual ICollection<Agreement> Agreements { get; set; }
     public virtual ICollection<Executor> Executors { get; set; }
     
