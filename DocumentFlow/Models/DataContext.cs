@@ -54,7 +54,7 @@ public class DataContext : DbContext
             new Status()
             {
                 Id = 4,
-                Name = "Одобренно"
+                Name = "Одобрено"
             }
         );
         model.Entity<Department>().HasData(
