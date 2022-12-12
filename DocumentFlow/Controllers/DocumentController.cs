@@ -1,6 +1,7 @@
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Document;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace DocumentFlow.Controllers;
 
@@ -38,7 +39,7 @@ public class DocumentController : BaseController
         };
         await _dataContext.AddAsync(document);
         await _dataContext.SaveChangesAsync();
-        return RedirectToAction("GetById","Document");
+        return RedirectToAction("GetAll","Document");
     }
     
     private static int NumberGenerator(int i)
@@ -57,6 +58,7 @@ public class DocumentController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetById(Guid id)
     {
+        var currentUserId = GetCurrentUserId();
         var document = await _dataContext.Documents.FindAsync(id);
         if (document == null)
         {
@@ -72,7 +74,9 @@ public class DocumentController : BaseController
             Type = document.Type,
             CorrespondentNumber = document.CorrespondentNumber,
             DocumentNumber = document.DocumentNumber,
-            CreatedAtCorrespondent = document.CreatedAtCorrespondent
+            CreatedAtCorrespondent = document.CreatedAtCorrespondent,
+            Executors = document.Executors.ToList(),
+            CurrentUserId = currentUserId
         };
         return View(newDocument);
     }
@@ -81,15 +85,43 @@ public class DocumentController : BaseController
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var userId = GetCurrentUserId();
-        var doc = _dataContext.Documents.Where(x => x.UserId.Equals(userId)).Select(x => new GetAllDocumentsViewModel()
+        var doc = await _dataContext.Documents.Select(x => new GetAllDocumentsViewModel()
         {
             Id = x.Id,
             Type = x.Type,
             Correspondent = x.Correspondent,
             DocumentNumber = x.DocumentNumber,
-            Topic = x.Topic
-        }).ToList();
+            Topic = x.Topic,
+            Status = x.Status.Name
+        }).ToListAsync();
         return View(doc);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Update(int statusId, Guid id,Guid executorId)
+    {
+        var executor = await _dataContext.Executors.FindAsync(executorId);
+        if (executor == null)
+        {
+            return null;
+        }
+        executor.StatusId = statusId;
+        await _dataContext.SaveChangesAsync();
+        var executors = await _dataContext.Executors.Where(x => x.DocumentId.Equals(id) && (x.StatusId == 1 || x.StatusId == 3))
+            .FirstOrDefaultAsync();
+        if (executors == null)
+        {
+            var document = await _dataContext.Documents.FindAsync(id);
+            document!.StatusId = 4;
+            await _dataContext.SaveChangesAsync();
+        }
+        if (executors is { StatusId: 3 })
+        {
+            var document = await _dataContext.Documents.FindAsync(id);
+            document!.StatusId = 3;
+            await _dataContext.SaveChangesAsync();
+        }
+      
+        return Redirect($"/Document/GetById/{id}");
     }
 }
