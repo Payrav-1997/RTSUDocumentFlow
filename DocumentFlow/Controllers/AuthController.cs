@@ -39,7 +39,7 @@ public class AuthController : BaseController
             return View(model);
         }
         Authenticate(user.Phone, user.Id, user.Role.Name);
-        return Redirect("Statistics/StatisticsCount");
+        return Redirect("Home/Index");
       
     }
     

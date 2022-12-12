@@ -14,6 +14,7 @@ public class DataContext : DbContext
     public DbSet<Document> Documents { get; set; }
     public DbSet<Executor> Executors { get; set; }
     public DbSet<Agreement> Agreements { get; set; }
+    public DbSet<Notion> Notions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder model)
     {
@@ -26,10 +27,14 @@ public class DataContext : DbContext
             new Role()
             {
                 Id = 2,
-                Name = "Пользователь"
+                Name = "Сотрудник"
+            },
+            new Role()
+            {
+                Id = 3,
+                Name = "Исполниель"
             }
         );
-        
         model.Entity<Status>().HasData(
             new Status()
             {
@@ -39,6 +44,16 @@ public class DataContext : DbContext
             new Status()
             {
                 Id = 2,
+                Name = "В процессе"
+            },
+            new Status()
+            {
+                Id = 3,
+                Name = "Отказано"
+            },
+            new Status()
+            {
+                Id = 4,
                 Name = "Одобренно"
             }
         );

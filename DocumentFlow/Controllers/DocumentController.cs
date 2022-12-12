@@ -85,7 +85,10 @@ public class DocumentController : BaseController
         var doc = _dataContext.Documents.Where(x => x.UserId.Equals(userId)).Select(x => new GetAllDocumentsViewModel()
         {
             Id = x.Id,
-            Type = x.Type
+            Type = x.Type,
+            Correspondent = x.Correspondent,
+            DocumentNumber = x.DocumentNumber,
+            Topic = x.Topic
         }).ToList();
         return View(doc);
     }

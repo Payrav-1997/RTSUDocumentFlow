@@ -27,9 +27,9 @@
             </tr>
             </thead>
             <tbody>
+             <h3>Название отдела: @Model.Select(x=>x.DepartmentName).FirstOrDefault()</h3>
             @foreach (var user in Model)
             {
-                <h3>@user.DepartmentName</h3>
                 <tr>
                     <td>@user.Name</td>
                     <td>@user.Email</td>
@@ -40,10 +40,10 @@
                             {
                                 <img src="/@user.Logo" class="rounded-circle profile-img" alt="avatar">
                             }
-                              @if (string.IsNullOrEmpty(@user.Logo))
-                              {
-                                  <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
-                              }
+                            @if (string.IsNullOrEmpty(@user.Logo))
+                            {
+                                <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
+                            }
                         </span>
                     </td>
                     <td class="text-center">

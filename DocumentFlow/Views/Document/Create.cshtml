@@ -9,16 +9,16 @@
     <form class="form-vertical" enctype="multipart/form-data" asp-action="Create" asp-controller="Document" method="post">
         <div style="color: red" asp-validation-summary="ModelOnly"></div>
         <div class="form-group mb-4">
-            <label class="control-label">Коррреспондент:</label>
+            <label class="control-label">Корреспондент:</label>
             <input type="text" name="Correspondent" asp-for="Correspondent" class="form-control">
         </div>
         <div class="form-group mb-4">
-            <label class="control-label">Тел коррреспондента:</label>
+            <label class="control-label">Тел корреспондента:</label>
             <input type="text" name="CorrespondentNumber" asp-for="CorrespondentNumber" class="form-control">
         </div>
-        <div class="form-group mb-4">
+        <div class="clipboard">
             <label class="control-label">Тема:</label>
-            <input type="text" name="topic" asp-for="Topic" class="form-control">
+            <textarea name="topic" asp-for="Topic" class="form-control mb-4" rows="3" id="textarea-copy">Lorem ipsum dolor sit amet, consectetur adipiscing elit...</textarea>
         </div>
         <div class="form-group mb-4">
             <label class="control-label">Тип документа:</label>
@@ -27,3 +27,6 @@
         <input type="submit" value="Добавить" class="btn btn-primary ml-3 mt-3">
     </form>
 </div>
+
+
+@await Html.PartialAsync("_ScriptsPartial")

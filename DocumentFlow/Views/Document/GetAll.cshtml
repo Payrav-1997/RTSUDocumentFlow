@@ -3,18 +3,97 @@
 @{
     Layout = "_Layout";
 }
-<div class="d-flex flex-wrap" >
-  @foreach (var doc in Model)
-  {
-      <div class="mx-4 py-2" style="width: 9%;">
-          <div class="card component-card_2">
-              <img src="~/defoultImage/PDF_file_icon.svg.png " width="40px" height="130px" class="card-img-top" alt="widget-card-2" >
-              <div class="card-body">
-                  <h5 class="card-title">@doc.Type</h5>
-                  @* <p class="card-text">Etiam sed augue ac justo tincidunt posuere. Vivamus euismod eros, nec risus malesuada.</p> *@
-                  <a asp-action="GetById" asp-controller="Document" asp-route-id="@doc.Id"class="btn btn-primary">Подробно</a>
-              </div>
-          </div>
-      </div>
-  }  
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link href="~/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="~/assets/css/plugins.css" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/datatables.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/css/forms/theme-checkbox-radio.css">
+    <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/dt-global_style.css">
+    <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/custom_dt_custom.css">
+</head>
+<body>
+<div class="widget-content widget-content-area">
+    <div class="table-responsive mb-4">
+        <table id="style-2" class="table style-2  table-hover">
+            <thead>
+            <tr>
+                <th>№</th>
+                <th>Корреспондент</th>
+                <th>Тип документа</th>
+                <th>Описание</th>
+                <th class="text-center">Фото</th>
+                <th class="text-center">Добавление</th>
+                <th class="text-center">Действие</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var document in Model)
+            {
+                <tr>
+                    <td>@document.DocumentNumber</td>
+                    <td>@document.Correspondent</td>
+                    <td>@document.Type</td>
+                    <td>@document.Topic</td>
+                    <td class="text-center">
+                        <span>
+                            <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
+                        </span>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="Create" asp-controller="Executor" asp-route-id="@document.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Добавить исполнителя">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </a>
+                    </td>
+                    <td class="text-center">
+                        <a asp-action="GetById" asp-controller="Document" asp-route-id="@document.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Подробно">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
+                                <circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </a>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
 </div>
+<script src="~/assets/js/libs/jquery-3.1.1.min.js"></script>
+<script src="~/bootstrap/js/popper.min.js"></script>
+<script src="~/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/plugins/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="~/assets/js/app.js"></script>
+
+<script>
+        $(document).ready(function() {
+            App.init();
+        });
+    </script>
+<script src="~/assets/js/custom.js"></script>
+<!-- BEGIN PAGE LEVEL SCRIPTS -->
+<script src="~/plugins/table/datatable/datatables.js"></script>
+<script>
+        // var e;
+
+        c2 = $('#style-2').DataTable({
+            "oLanguage": {
+                "oPaginate": { "sPrevious": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>', "sNext": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' },
+                "sInfo": "Страница _PAGE_ след. _PAGES_",
+                "sSearch": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+                "sSearchPlaceholder": "Поиск...",
+               "sLengthMenu": "Results :  _MENU_",
+            },
+            "lengthMenu": [5, 10, 20, 50],
+            "pageLength": 5 
+        });
+
+        multiCheck(c2);
+
+    </script>
+<!-- END PAGE LEVEL SCRIPTS -->
+</body>
+</html>

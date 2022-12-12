@@ -3,6 +3,7 @@ using System;
 using DocumentFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DocumentFlow.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221212121559_feat:Notion")]
+    partial class featNotion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,7 +80,7 @@ namespace DocumentFlow.Migrations
                         new
                         {
                             Id = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
-                            CreatedAt = new DateTime(2022, 12, 12, 15, 0, 56, 277, DateTimeKind.Utc).AddTicks(6064),
+                            CreatedAt = new DateTime(2022, 12, 12, 12, 15, 58, 822, DateTimeKind.Utc).AddTicks(1998),
                             Name = "Test"
                         });
                 });
@@ -216,7 +219,7 @@ namespace DocumentFlow.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "Сотрудник"
+                            Name = "Пользователь"
                         },
                         new
                         {
@@ -250,16 +253,6 @@ namespace DocumentFlow.Migrations
                         new
                         {
                             Id = 2,
-                            Name = "В процессе"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "Отказано"
-                        },
-                        new
-                        {
-                            Id = 4,
                             Name = "Одобренно"
                         });
                 });
@@ -314,14 +307,14 @@ namespace DocumentFlow.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("61ba371d-3228-410b-bb99-ed9430a6ab42"),
+                            Id = new Guid("f7489d2a-5e75-4fda-a8cf-554e6bded6be"),
                             Address = "Test",
-                            CreatedAt = new DateTime(2022, 12, 12, 15, 0, 56, 358, DateTimeKind.Utc).AddTicks(8295),
+                            CreatedAt = new DateTime(2022, 12, 12, 12, 15, 58, 900, DateTimeKind.Utc).AddTicks(1590),
                             DepartmentId = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
                             Email = "Admin@gmail.com",
                             Logo = "user/638061145023499962thumb_1559_600_480_0_0_auto.jpg",
                             Name = "Админ",
-                            Password = "$2b$10$ZrT8SU/Hrp2FtE7XlpeDG.jVSyj2VTGSroLLwHHM3HdO0fbck1GJC",
+                            Password = "$2b$10$LxHjPhSN/RM8Bi8CVhKMF.EH/GxoZzaIV35ZL3d27yxMcUIo/qVPi",
                             Phone = "+992915224442",
                             RoleId = 1
                         });

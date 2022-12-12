@@ -17,12 +17,15 @@ public class StatisticsController : BaseController
     [HttpGet]
     public async Task<IActionResult> StatisticsCount()
     {
+        var userId = GetCurrentUserId();
         var userCount =  _dataContext.Users.Count();
         var departmentCount =  _dataContext.Departments.Count();
+        var documentsCount =  _dataContext.Documents.Count();
         var data = new GetStatisticsViewModel()
         {
             DepartmentCount = departmentCount,
-            UserCount = userCount
+            UserCount = userCount,
+            DocumentCount = documentsCount
         };
         return View(data);
     }

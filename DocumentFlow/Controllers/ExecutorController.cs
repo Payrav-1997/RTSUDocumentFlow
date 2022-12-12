@@ -17,7 +17,7 @@ public class ExecutorController : BaseController
     public async Task<IActionResult> Create(Guid id)
     {
         var currentUserId = GetCurrentUserId();
-        var users = _dataContext.Users.Where(x=>x.Id != currentUserId).ToList();
+        var users = _dataContext.Users.Where(x=>x.Id != currentUserId).OrderBy(x=>x.CreatedAt).ToList();
         var executor = new CreateExecutorViewModel()
         {
             Users = users,
@@ -29,20 +29,37 @@ public class ExecutorController : BaseController
     [HttpPost]
     public async Task<IActionResult> Create(CreateExecutorViewModel model)
     {
-        var executor = new Executor()
+        
+        foreach (var userId in model.UserId)
         {
-            Code = model.Code,
-            Description = model.Description,
-            DocumentId = model.DocumentId,
-            StatusId = 1,
-            CreatedAt = DateTime.UtcNow,
-            ExecutionTime = DateTime.UtcNow,
-            ExecutorRole = model.ExecutorRole,
-            UsersId = model.UserId,
-            DateOfOrder = DateTime.UtcNow
-        };
-        await _dataContext.AddAsync(executor);
-        await _dataContext.SaveChangesAsync();
+            var user = await _dataContext.Users.FindAsync(userId);
+            var executor = new Executor()
+            {
+                Id = Guid.NewGuid(),
+                Code = model.Code,
+                Description = model.Description,
+                DocumentId = model.DocumentId,
+                StatusId = 1,
+                CreatedAt = DateTime.UtcNow,
+                ExecutionTime = model.ExecutionTime,
+                ExecutorRole = user!.Role.Name,
+                UserId = userId,
+                DateOfOrder = DateTime.UtcNow
+            };
+            await _dataContext.AddAsync(executor);
+            await _dataContext.SaveChangesAsync();
+            var notion = new Notion()
+            {
+                Id = Guid.NewGuid(),
+                Message = executor.Description,
+                UserId = userId
+            };
+            await _dataContext.AddAsync(notion);
+            await _dataContext.SaveChangesAsync();
+        }
+
+       
+        
         return RedirectToAction("GetAll","Document");
     }
 }
