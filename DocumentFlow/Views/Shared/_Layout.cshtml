@@ -64,7 +64,7 @@
                                     @foreach (var notion in notions)
                                     {
                                         <div class="notification-para py-2">
-                                            <a asp-action="Delete" asp-controller="Notion" asp-route-id="@notion.Id" >@notion.Message</a>
+                                            <a asp-action="GetById" asp-controller="Document" asp-route-id="@notion.DocumentId">@notion.Message</a><a class="ml-5" style="color: red" asp-action="Delete" asp-controller="Notion" asp-route-id="@notion.Id">X</a>
                                         </div>
                                     }
                                 </div>

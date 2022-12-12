@@ -24,6 +24,7 @@
                 <th>Корреспондент</th>
                 <th>Тип документа</th>
                 <th>Описание</th>
+                <th class="text-center">Status</th>
                 <th class="text-center">Фото</th>
                 <th class="text-center">Добавление</th>
                 <th class="text-center">Действие</th>
@@ -37,18 +38,56 @@
                     <td>@document.Correspondent</td>
                     <td>@document.Type</td>
                     <td>@document.Topic</td>
+                    @if (document.Status.Equals("Новый"))
+                    {
+                        <td class="text-center">
+                            <span class="shadow-none badge outline-badge-primary">@document.Status</span>
+                        </td>
+                    }
+                    @if (document.Status.Equals("Одобрено"))
+                    {
+                        <td class="text-center">
+                            <span class="shadow-none badge outline-badge-secondary">@document.Status</span>
+                        </td>
+                    }
+                    @if (document.Status.Equals("В процессе"))
+                    {
+                        <td class="text-center">
+                            <span class="shadow-none badge outline-badge-warning">@document.Status</span>
+                        </td>
+                    }
+                    @if (document.Status.Equals("Отказано"))
+                    {
+                        <td class="text-center">
+                            <span class="shadow-none badge outline-badge-danger">@document.Status</span>
+                        </td>
+                    }
                     <td class="text-center">
                         <span>
                             <img src="~/assets/img/90x90.jpg" class="rounded-circle profile-img" alt="avatar">
                         </span>
                     </td>
-                    <td class="text-center">
-                        <a asp-action="Create" asp-controller="Executor" asp-route-id="@document.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Добавить исполнителя">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
-                                <circle cx="12" cy="12" r="10"></circle>
-                            </svg>
-                        </a>
-                    </td>
+                    @if (document.Status.Equals("Новый"))
+                    {
+                        <td class="text-center">
+                            <a asp-action="Create" asp-controller="Executor" asp-route-id="@document.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Добавить исполнителя">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg>
+                            </a>
+                        </td>
+                    }
+                     @if (!document.Status.Equals("Новый"))
+                     {
+                          <td class="text-center">
+                            <a class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Добавить исполнителя">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                </svg>
+                            </a>
+                        </td>
+                     }
+                                        {
                     <td class="text-center">
                         <a asp-action="GetById" asp-controller="Document" asp-route-id="@document.Id" class="bs-tooltip" data-toggle="tooltip" data-placement="top" title="" data-original-title="Подробно">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-x-circle table-cancel">
