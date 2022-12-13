@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Statistics;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentFlow.Controllers;
@@ -15,6 +16,7 @@ public class StatisticsController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> StatisticsCount()
     {
         var userId = GetCurrentUserId();

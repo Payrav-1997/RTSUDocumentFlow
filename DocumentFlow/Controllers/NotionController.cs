@@ -1,4 +1,5 @@
 using DocumentFlow.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentFlow.Controllers;
@@ -12,6 +13,7 @@ public class NotionController : BaseController
         _dataContext = dataContext;
     }
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Delete(Guid id)
     {
         var notion = await _dataContext.Notions.FindAsync(id);

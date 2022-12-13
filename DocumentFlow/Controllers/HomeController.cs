@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using DocumentFlow.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DocumentFlow.Controllers;
 
@@ -12,12 +13,12 @@ public class HomeController : BaseController
     {
         _logger = logger;
     }
-
+    [Authorize]
     public IActionResult Index()
     {
         return View();
     }
-
+    [Authorize]
     public IActionResult Privacy()
     {
         return View();

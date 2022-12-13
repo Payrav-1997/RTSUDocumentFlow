@@ -1,5 +1,6 @@
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Executor;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentFlow.Controllers;
@@ -14,6 +15,7 @@ public class ExecutorController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Create(Guid id)
     {
         var currentUserId = GetCurrentUserId();
@@ -27,6 +29,7 @@ public class ExecutorController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateExecutorViewModel model)
     {
         

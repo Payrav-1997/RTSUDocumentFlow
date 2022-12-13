@@ -1,5 +1,6 @@
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +16,7 @@ public class UserController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Create()
     {
        var userRoles = await _dataContext.Roles.ToListAsync();
@@ -28,6 +30,7 @@ public class UserController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateUserViewModel userViewModel)
     {
         var user = await GetByPhone(userViewModel.Phone);
@@ -77,6 +80,7 @@ public class UserController : BaseController
     }
     
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetById(Guid id)
     {
         var user = await _dataContext.Users.FirstOrDefaultAsync(x=>x.Id.Equals(id));
@@ -100,6 +104,7 @@ public class UserController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var users = _dataContext.Users.Select(x => new GetAllUserViewModel()
@@ -115,6 +120,7 @@ public class UserController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Update()
     {
         var userId = GetCurrentUserId();
@@ -131,6 +137,7 @@ public class UserController : BaseController
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Update(UpdateUserViewModel model)
     {
         var user = await _dataContext.Users.FindAsync(model.Id);
@@ -148,12 +155,14 @@ public class UserController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public IActionResult UpdatePassword()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> UpdatePassword(UpdatePasswordViewModel model)
     {
         var userId = GetCurrentUserId();

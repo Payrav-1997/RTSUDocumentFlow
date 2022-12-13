@@ -1,5 +1,6 @@
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Document;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,12 +16,14 @@ public class DocumentController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateDocumentViewModel documentViewModel)
     {
         var userId = GetCurrentUserId();
@@ -56,6 +59,7 @@ public class DocumentController : BaseController
 
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetById(Guid id)
     {
         var currentUserId = GetCurrentUserId();
@@ -83,6 +87,7 @@ public class DocumentController : BaseController
 
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var doc = await _dataContext.Documents.Select(x => new GetAllDocumentsViewModel()
@@ -98,6 +103,7 @@ public class DocumentController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> Update(int statusId, Guid id,Guid executorId)
     {
         var executor = await _dataContext.Executors.FindAsync(executorId);

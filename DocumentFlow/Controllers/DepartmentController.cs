@@ -1,6 +1,7 @@
 using System.Data.Entity;
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Department;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DocumentFlow.Controllers;
@@ -16,12 +17,14 @@ public class DepartmentController : BaseController
 
 
     [HttpGet]
+    [Authorize]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
+    [Authorize]
     public async Task<IActionResult> Create(CreateDepartmentViewModel model)
     {
         var department =  _dataContext.Departments.FirstOrDefault(x => x.Name.Equals(model.Name));
@@ -43,6 +46,7 @@ public class DepartmentController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetAll()
     {
         var user = await _dataContext.Users.FindAsync(GetCurrentUserId());
@@ -58,6 +62,7 @@ public class DepartmentController : BaseController
     }
 
     [HttpGet]
+    [Authorize]
     public async Task<IActionResult> GetDepartmentUsers(Guid id)
     {
         var userId = GetCurrentUserId();
