@@ -13,7 +13,6 @@ public class DataContext : DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Document> Documents { get; set; }
     public DbSet<Executor> Executors { get; set; }
-    public DbSet<Agreement> Agreements { get; set; }
     public DbSet<Notion> Notions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder model)
@@ -61,7 +60,7 @@ public class DataContext : DbContext
             new Department()
             {
                 Id = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
-                Name = "Test",
+                Name = "Алиф",
                 CreatedAt = DateTime.UtcNow
             }
         );

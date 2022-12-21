@@ -3,6 +3,7 @@ using System;
 using DocumentFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DocumentFlow.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221213065738_fix: executor")]
+    partial class fixexecutor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +27,37 @@ namespace DocumentFlow.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("DocumentFlow.Models.Agreement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AgreementDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descrioption")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DocumentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExecutorId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.ToTable("Agreements");
+                });
 
             modelBuilder.Entity("DocumentFlow.Models.Department", b =>
                 {
@@ -46,8 +80,8 @@ namespace DocumentFlow.Migrations
                         new
                         {
                             Id = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
-                            CreatedAt = new DateTime(2022, 12, 21, 4, 4, 23, 306, DateTimeKind.Utc).AddTicks(8923),
-                            Name = "Алиф"
+                            CreatedAt = new DateTime(2022, 12, 13, 6, 57, 38, 396, DateTimeKind.Utc).AddTicks(3000),
+                            Name = "Test"
                         });
                 });
 
@@ -71,9 +105,6 @@ namespace DocumentFlow.Migrations
                     b.Property<DateTime>("CreatedAtCorrespondent")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<Guid>("DepartmentId")
-                        .HasColumnType("uuid");
-
                     b.Property<int>("DocumentNumber")
                         .HasColumnType("integer");
 
@@ -92,8 +123,6 @@ namespace DocumentFlow.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DepartmentId");
 
                     b.HasIndex("StatusId");
 
@@ -294,34 +323,45 @@ namespace DocumentFlow.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bd73b24-666f-41f7-bb5c-3dc6950c56d4"),
+                            Id = new Guid("97c60058-235d-47be-8e49-30acdd2de7c4"),
                             Address = "Test",
-                            CreatedAt = new DateTime(2022, 12, 21, 4, 4, 23, 389, DateTimeKind.Utc).AddTicks(1769),
+                            CreatedAt = new DateTime(2022, 12, 13, 6, 57, 38, 479, DateTimeKind.Utc).AddTicks(1523),
                             DepartmentId = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
                             Email = "Admin@gmail.com",
                             Logo = "user/638061145023499962thumb_1559_600_480_0_0_auto.jpg",
                             Name = "Админ",
-                            Password = "$2b$10$sOH9IQCNz9MZVfb2kRb0g.vm3Z1ZoPB7qI/dqsAGyB4QKJ11EJiLu",
+                            Password = "$2b$10$iBi36j3w4PsWxJWlY3UiUOUlIa5bunoGxZ3TaSFjYadjQN4SpZOs.",
                             Phone = "+992915224442",
                             RoleId = 1
                         });
                 });
 
-            modelBuilder.Entity("DocumentFlow.Models.Document", b =>
+            modelBuilder.Entity("DocumentFlow.Models.Agreement", b =>
                 {
-                    b.HasOne("DocumentFlow.Models.Department", "Department")
-                        .WithMany()
-                        .HasForeignKey("DepartmentId")
+                    b.HasOne("DocumentFlow.Models.Document", "Document")
+                        .WithMany("Agreements")
+                        .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DocumentFlow.Models.Executor", "Executor")
+                        .WithMany()
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("Executor");
+                });
+
+            modelBuilder.Entity("DocumentFlow.Models.Document", b =>
+                {
                     b.HasOne("DocumentFlow.Models.Status", "Status")
                         .WithMany()
                         .HasForeignKey("StatusId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Department");
 
                     b.Navigation("Status");
                 });
@@ -377,6 +417,8 @@ namespace DocumentFlow.Migrations
 
             modelBuilder.Entity("DocumentFlow.Models.Document", b =>
                 {
+                    b.Navigation("Agreements");
+
                     b.Navigation("Executors");
                 });
 #pragma warning restore 612, 618

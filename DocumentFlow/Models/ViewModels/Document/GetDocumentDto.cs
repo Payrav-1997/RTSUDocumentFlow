@@ -1,3 +1,5 @@
+using DocumentFlow.Models.ViewModels.Executor;
+
 namespace DocumentFlow.Models.ViewModels.Document;
 
 public class GetDocumentDto
@@ -12,4 +14,6 @@ public class GetDocumentDto
     public Guid CurrentUserId { get; set; }
     public DateTime CreatedAtCorrespondent { get; set; }
     public List<Models.Executor> Executors { get; set; }
+    public string Description { get; set; }
+    public string DepartamentName { get; set; }
 }

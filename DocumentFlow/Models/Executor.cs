@@ -9,6 +9,7 @@ public class Executor
     public Guid DocumentId { get; set; }
     public string ExecutionTime { get; set; }
     public string Description { get; set; }
+    public string? Cause { get; set; }
     public string ExecutorRole { get; set; }
     public DateTime CreatedAt { get; set; }
     public int StatusId { get; set; }

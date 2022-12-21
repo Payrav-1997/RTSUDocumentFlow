@@ -3,6 +3,7 @@ using System;
 using DocumentFlow.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DocumentFlow.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221221032533_feat:documetnr")]
+    partial class featdocumetnr
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +27,37 @@ namespace DocumentFlow.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("DocumentFlow.Models.Agreement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("AgreementDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Descrioption")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("DocumentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("ExecutorId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DocumentId");
+
+                    b.HasIndex("ExecutorId");
+
+                    b.ToTable("Agreements");
+                });
 
             modelBuilder.Entity("DocumentFlow.Models.Department", b =>
                 {
@@ -46,8 +80,8 @@ namespace DocumentFlow.Migrations
                         new
                         {
                             Id = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
-                            CreatedAt = new DateTime(2022, 12, 21, 4, 4, 23, 306, DateTimeKind.Utc).AddTicks(8923),
-                            Name = "Алиф"
+                            CreatedAt = new DateTime(2022, 12, 21, 3, 25, 32, 874, DateTimeKind.Utc).AddTicks(3319),
+                            Name = "Test"
                         });
                 });
 
@@ -294,17 +328,36 @@ namespace DocumentFlow.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3bd73b24-666f-41f7-bb5c-3dc6950c56d4"),
+                            Id = new Guid("9e569ae4-5787-4ece-b4c8-011662305d25"),
                             Address = "Test",
-                            CreatedAt = new DateTime(2022, 12, 21, 4, 4, 23, 389, DateTimeKind.Utc).AddTicks(1769),
+                            CreatedAt = new DateTime(2022, 12, 21, 3, 25, 32, 955, DateTimeKind.Utc).AddTicks(3568),
                             DepartmentId = new Guid("c446e52f-223d-4ddc-810c-d4f6b345f440"),
                             Email = "Admin@gmail.com",
                             Logo = "user/638061145023499962thumb_1559_600_480_0_0_auto.jpg",
                             Name = "Админ",
-                            Password = "$2b$10$sOH9IQCNz9MZVfb2kRb0g.vm3Z1ZoPB7qI/dqsAGyB4QKJ11EJiLu",
+                            Password = "$2b$10$FzoOqyj6i03wNAInyAI3b.ScsuhcgXJlckpmohi2xvpsNEmwHZVye",
                             Phone = "+992915224442",
                             RoleId = 1
                         });
+                });
+
+            modelBuilder.Entity("DocumentFlow.Models.Agreement", b =>
+                {
+                    b.HasOne("DocumentFlow.Models.Document", "Document")
+                        .WithMany("Agreements")
+                        .HasForeignKey("DocumentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DocumentFlow.Models.Executor", "Executor")
+                        .WithMany()
+                        .HasForeignKey("ExecutorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Document");
+
+                    b.Navigation("Executor");
                 });
 
             modelBuilder.Entity("DocumentFlow.Models.Document", b =>
@@ -377,6 +430,8 @@ namespace DocumentFlow.Migrations
 
             modelBuilder.Entity("DocumentFlow.Models.Document", b =>
                 {
+                    b.Navigation("Agreements");
+
                     b.Navigation("Executors");
                 });
 #pragma warning restore 612, 618

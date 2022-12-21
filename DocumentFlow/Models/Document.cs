@@ -13,10 +13,8 @@ public class Document
     public DateTime CreatedAt { get; set; }
     public virtual Status Status { get; set; }
     public Guid UserId { get; set; }
-    
-    
-    
-    public virtual ICollection<Agreement> Agreements { get; set; }
+    public Guid DepartmentId { get; set; }
+    public virtual Department Department { get; set; }
     public virtual ICollection<Executor> Executors { get; set; }
     
 }

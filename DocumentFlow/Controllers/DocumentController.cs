@@ -17,9 +17,14 @@ public class DocumentController : BaseController
 
     [HttpGet]
     [Authorize]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
-        return View();
+        var departments = await _dataContext.Departments.ToListAsync();
+        var document = new CreateDocumentViewModel()
+        {
+             Departments = departments
+        };
+        return View(document);
     }
 
     [HttpPost]
@@ -38,7 +43,8 @@ public class DocumentController : BaseController
             CreatedAt = DateTime.UtcNow,
             StatusId = 1,
             DocumentNumber = NumberGenerator(6),
-            UserId = userId
+            UserId = userId,
+            DepartmentId = documentViewModel.DepartmentId
         };
         await _dataContext.AddAsync(document);
         await _dataContext.SaveChangesAsync();
@@ -80,7 +86,8 @@ public class DocumentController : BaseController
             DocumentNumber = document.DocumentNumber,
             CreatedAtCorrespondent = document.CreatedAtCorrespondent,
             Executors = document.Executors.ToList(),
-            CurrentUserId = currentUserId
+            CurrentUserId = currentUserId,
+            DepartamentName = document.Department.Name
         };
         return View(newDocument);
     }
@@ -90,6 +97,8 @@ public class DocumentController : BaseController
     [Authorize]
     public async Task<IActionResult> GetAll()
     {
+        var currentUser = GetCurrentUserId();
+        var userRole = await _dataContext.Users.FindAsync(currentUser);
         var doc = await _dataContext.Documents.Select(x => new GetAllDocumentsViewModel()
         {
             Id = x.Id,
@@ -97,7 +106,9 @@ public class DocumentController : BaseController
             Correspondent = x.Correspondent,
             DocumentNumber = x.DocumentNumber,
             Topic = x.Topic,
-            Status = x.Status.Name
+            Status = x.Status.Name,
+            UserRole = userRole!.Role.Name,
+            DepartmentId = x.DepartmentId
         }).ToListAsync();
         return View(doc);
     }
@@ -112,6 +123,37 @@ public class DocumentController : BaseController
             return null;
         }
         executor.StatusId = statusId;
+        await _dataContext.SaveChangesAsync();
+        var executors = await _dataContext.Executors.Where(x => x.DocumentId.Equals(id) && (x.StatusId == 1 || x.StatusId == 3))
+            .FirstOrDefaultAsync();
+        if (executors == null)
+        {
+            var document = await _dataContext.Documents.FindAsync(id);
+            document!.StatusId = 4;
+            await _dataContext.SaveChangesAsync();
+        }
+        if (executors is { StatusId: 3 })
+        {
+            var document = await _dataContext.Documents.FindAsync(id);
+            document!.StatusId = 3;
+            await _dataContext.SaveChangesAsync();
+        }
+      
+        return Redirect($"/Document/GetById/{id}");
+    }
+    
+    
+    [HttpPost]
+    [Authorize]
+    public async Task<IActionResult> Reject(int statusId, Guid id,Guid executorId,GetDocumentDto documentDto)
+    {
+        var executor = await _dataContext.Executors.FindAsync(executorId);
+        if (executor == null)
+        {
+            return null;
+        }
+        executor.StatusId = statusId;
+        executor.Cause = documentDto.Description;
         await _dataContext.SaveChangesAsync();
         var executors = await _dataContext.Executors.Where(x => x.DocumentId.Equals(id) && (x.StatusId == 1 || x.StatusId == 3))
             .FirstOrDefaultAsync();

@@ -16,14 +16,15 @@ public class ExecutorController : BaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Create(Guid id)
+    public async Task<IActionResult> Create(Guid id,Guid departmentId)
     {
         var currentUserId = GetCurrentUserId();
-        var users = _dataContext.Users.Where(x=>x.Id != currentUserId && x.RoleId == 3).OrderBy(x=>x.CreatedAt).ToList();
+        var users = _dataContext.Users.Where(x=>x.Id != currentUserId && x.RoleId == 3 && x.DepartmentId.Equals(departmentId)).OrderBy(x=>x.CreatedAt).ToList();
         var executor = new CreateExecutorViewModel()
         {
             Users = users,
-            DocumentId = id
+            DocumentId = id,
+            Code = NumberGenerator(5)
         };
         return View(executor);
     }
@@ -75,5 +76,17 @@ public class ExecutorController : BaseController
         };
         await _dataContext.AddAsync(notion);
         await _dataContext.SaveChangesAsync();
+    }
+    
+    private static int NumberGenerator(int i)
+    {
+        if (i < 2)
+        {
+            throw new Exception("digitsCount must be greater than or equal to 2");
+        }
+        var min = Math.Pow(10, i - 1);
+        var max = Math.Pow(10, i) - 1;
+        var random = new Random();
+        return random.Next((int)min, (int)max);
     }
 }

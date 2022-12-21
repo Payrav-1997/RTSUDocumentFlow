@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/dt-global_style.css">
     <link rel="stylesheet" type="text/css" href="~/plugins/table/datatable/custom_dt_custom.css">
     <link href="~/assets/css/pages/privacy/privacy.css" rel="stylesheet" type="text/css"/>
+    <link href="~/assets/css/scrollspyNav.css" rel="stylesheet" type="text/css"/>
+    <link href="~/assets/css/components/custom-modal.css" rel="stylesheet" type="text/css"/>
 </head>
 <body>
 <div id="privacyWrapper" class="">
@@ -32,6 +34,7 @@
             <div class="privacy-content-container">
                 <section>
                     <h4 style="text-align: center">@Model.Type</h4>
+                    <h6 style="text-align: end">Назавние отдела: @Model.DepartamentName</h6>
                     <h6 style="text-align: end">Корреспондент: @Model.Correspondent</h6>
                     <h6 style="text-align: end">Номер: @Model.CorrespondentNumber</h6>
                     <h5 style="text-align: center">Описание</h5>
@@ -79,6 +82,7 @@
             <th>Дата одобрение</th>
             <th>Роль</th>
             <th class="text-center">Статус</th>
+            <th class="text-center">Kомментарий</th>
             <th class="text-center">Действие</th>
         </tr>
         </thead>
@@ -108,22 +112,56 @@
                         <span class="shadow-none badge outline-badge-danger">@executor.Status.Name</span>
                     </td>
                 }
+                @if (executor.StatusId == 3)
+                {
+                    <td class="text-center">@executor.Cause</td>
+                }
+                @if (executor.StatusId != 3)
+                {
+                    <td class="text-center">Пусто</td>
+                }
+
                 @if (executor.UserId.Equals(@Model.CurrentUserId))
                 {
                     @if (executor.StatusId != 4 && executor.StatusId != 3)
                     {
                         <td class="text-center">
-                            <a asp-action="Update" asp-controller="Document" asp-route-statusId="4" class="btn btn-success" asp-route-id="@Model.Id" asp-route-executorId="@executor.Id">Одобрить</a>
-                            <a asp-action="Update" asp-controller="Document" asp-route-statusId="3" class="btn btn-danger" asp-route-id="@Model.Id" asp-route-executorId="@executor.Id">Отказать</a>
-
+                            <a asp-action="Update" asp-controller="Document" asp-route-statusId="4" asp-route-id="@Model.Id" asp-route-executorId="@executor.Id" class="btn btn-success">Одобрить</a>
+                            <a type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                                Отказать
+                            </a>
                         </td>
                     }
                 }
+
+
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+
+                        <div class="modal-content">
+                            <form enctype="multipart/form-data" asp-action="Reject" asp-controller="Document" asp-route-statusId="3" asp-route-id="@Model.Id" asp-route-executorId="@executor.Id" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group mb-4">
+                                        <label class="control-label">Причина отказа:</label>
+                                        <input type="text" name="Description" asp-for="@Model.Description" class="form-control">
+                                    </div>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button class="btn" data-dismiss="modal"><i class="flaticon-cancel-12"></i> Отмена</button>
+                                    <input type="submit" value="Отказать" class="btn btn-primary">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
             </tr>
         }
         </tbody>
     </table>
 </div>
+
 
 <!-- END GLOBAL MANDATORY SCRIPTS -->
 <script src="~/assets/js/libs/jquery-3.1.1.min.js"></script>
