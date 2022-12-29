@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "5138:5138"
+    container_name: 'document-flow-service'
+    restart: unless-stopped
+    tty: true
+    env_file:
+      - .env
+    volumes:
+      - document-flow-service-logs:/app/logs
+    networks:
+      - document-flow-service-network
+  db:
+    image: postgres:latest
+    container_name: 'document-flow-service.db'
+    restart: unless-stopped
+    tty: true
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - document-flow-service-data:/var/lib/postgresql/data
+    networks:
+      - document-flow-service-network
+
+networks:
+  document-flow-service-network:
+    driver: bridge
+
+volumes:
+  document-flow-service-data:
+    driver: local
+  document-flow-service-uploads:
+    driver: local
+  document-flow-service-logs:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/var/log/document-flow'
