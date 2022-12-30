@@ -28,7 +28,7 @@ public class AuthController : BaseController
     public async Task<IActionResult> Login(AuthenticateModel model)
     {
         if (!ModelState.IsValid) return View(model);
-        var user = await _context.Users.FirstOrDefaultAsync(x=>x.Phone.Equals(model.Phone));
+        var user = _context.Users.FirstOrDefault(x=>x.Phone.Equals(model.Phone));
         if (user == null)
         {
             ModelState.AddModelError("", "Логин или пароль не корректный!");
@@ -39,13 +39,13 @@ public class AuthController : BaseController
             ModelState.AddModelError("", "Логин или пароль не корректный!");
             return View(model);
         }
-        Authenticate(user.Phone, user.Id, user.Role.Name);
+        await Authenticate(user.Phone, user.Id, user.Role.Name);
         return Redirect("Home/Index");
       
     }
     
     
-    private async void Authenticate(string phone,Guid Id,string role)
+    private async Task Authenticate(string phone,Guid Id,string role)
     {
         var list = new List<Claim>()
         {
