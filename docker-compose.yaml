@@ -12,6 +12,7 @@ services:
       - .env
     volumes:
       - document-flow-service-logs:/app/logs
+      - document-flow-service-uploads:${WWWROOT_PATH}
     networks:
       - document-flow-service-network
   db:
