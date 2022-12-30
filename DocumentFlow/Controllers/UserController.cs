@@ -67,7 +67,7 @@ public class UserController : BaseController
     {
         dir = dir.ToLower();
         var rootDirectory = Environment.GetEnvironmentVariable("WWWROOT_PATH");
-        var fileDirectory = Path.Combine(rootDirectory, dir);
+        var fileDirectory = Path.Combine("/app/uploads", dir);
         if (!Directory.Exists(fileDirectory))
             Directory.CreateDirectory(fileDirectory);
         var fileName = string.Concat(DateTime.Now.Ticks, file.FileName);
