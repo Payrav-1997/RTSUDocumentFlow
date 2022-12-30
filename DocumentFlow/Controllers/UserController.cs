@@ -67,13 +67,14 @@ public class UserController : BaseController
     {
         dir = dir.ToLower();
         var rootDirectory = Environment.GetEnvironmentVariable("WWWROOT_PATH");
-        var fileDirectory = Path.Combine("/app/uploads", dir);
+        var fileDirectory = Path.Combine(rootDirectory, dir);
         if (!Directory.Exists(fileDirectory))
             Directory.CreateDirectory(fileDirectory);
         var fileName = string.Concat(DateTime.Now.Ticks, file.FileName);
         var filePath = Path.Combine(fileDirectory, fileName);
         await using var fs = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(fs);
+        System.Console.WriteLine(System.IO.File.Exists(filePath));
         await fs.FlushAsync();
         fs.Close();
         return Path.Combine(dir,fileName);
