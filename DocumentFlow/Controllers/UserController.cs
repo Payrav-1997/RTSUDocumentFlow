@@ -97,6 +97,7 @@ public class UserController : BaseController
         }
         var newUser = new GetUserViewModel()
         {
+            Id = user.Id,
             Logo = user.Logo,
             Name = user.Name,
             Phone = user.Phone,
@@ -193,5 +194,18 @@ public class UserController : BaseController
         return Redirect($"getById/{@user.Id}");
     }
 
-   
+    [HttpGet]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var user = await _dataContext.Users.FindAsync(id);
+        if (user == null)
+        {
+            return RedirectToAction("GetAll","User");
+        }
+        _dataContext.Users.Remove(user);
+        await _dataContext.SaveChangesAsync();
+        return RedirectToAction("GetAll","User");
+    }
+
+
 }

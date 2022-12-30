@@ -71,7 +71,7 @@ public class DataContext : DbContext
                 Name = "Админ",
                 Address = "Test",
                 Email = "Admin@gmail.com",
-                Logo = "user/638061145023499962thumb_1559_600_480_0_0_auto.jpg",
+                Logo = "/defoultImage/free-user-icon-3296-thumb.png",   
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
                 RoleId = 1,
                 Phone = "+992915224442",
