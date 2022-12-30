@@ -1,3 +1,4 @@
+using DocumentFlow.Logger;
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +10,12 @@ namespace DocumentFlow.Controllers;
 public class UserController : BaseController
 {
     private readonly DataContext _dataContext;
+    private readonly ILoggerManager _loggerManager;
 
-    public UserController(DataContext dataContext)
+    public UserController(DataContext dataContext,ILoggerManager loggerManager)
     {
         _dataContext = dataContext;
+        _loggerManager = loggerManager;
     }
 
     [HttpGet]
@@ -74,9 +77,11 @@ public class UserController : BaseController
         var filePath = Path.Combine(fileDirectory, fileName);
         await using var fs = new FileStream(filePath, FileMode.Create);
         await file.CopyToAsync(fs);
-        // System.Console.WriteLine(System.IO.File.Exists(filePath));
-        // await fs.FlushAsync();
-        // fs.Close();
+        System.Console.WriteLine(System.IO.File.Exists(filePath));
+        _loggerManager.LogError(filePath);
+        _loggerManager.LogError(fileName);
+        await fs.FlushAsync();
+        fs.Close();
         return Path.Combine(dir,fileName);
     }
     

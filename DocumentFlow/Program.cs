@@ -1,7 +1,9 @@
 using DocumentFlow.Extensions;
+using DocumentFlow.Logger;
 using DocumentFlow.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using NLog;
 
 DotNetEnv.Env.Load();
 
@@ -10,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 builder.Services.ConfigureDataContext(builder.Configuration);
@@ -22,6 +25,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = new PathString("/Auth/Login");
         options.AccessDeniedPath = new PathString("/Home/Index");
     });
+
+//Logger
+LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
 
 var app = builder.Build();
 
