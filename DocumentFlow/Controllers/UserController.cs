@@ -45,7 +45,7 @@ public class UserController : BaseController
         var newUser = new User()
         {
             Id = Guid.NewGuid(),
-            Logo = await AddFileAsync(nameof(User),userViewModel.Logo),
+           // Logo = await AddFileAsync(nameof(User),userViewModel.Logo),
             Name = userViewModel.Name,
             Password = BCrypt.Net.BCrypt.HashPassword(userViewModel.Password),
             Phone = userViewModel.Phone,
