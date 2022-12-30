@@ -111,7 +111,7 @@ public class UserController : BaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> GetAll()
+    public IActionResult GetAll()
     {
         var users = _dataContext.Users.Select(x => new GetAllUserViewModel()
         {

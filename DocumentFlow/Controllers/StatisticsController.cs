@@ -17,7 +17,7 @@ public class StatisticsController : BaseController
 
     [HttpGet]
     [Authorize(Roles = "Админ,Сотрудник")]
-    public async Task<IActionResult> StatisticsCount()
+    public IActionResult StatisticsCount()
     {
         var userCount =  _dataContext.Users.Count();
         var departmentCount =  _dataContext.Departments.Count();
