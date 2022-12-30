@@ -16,7 +16,7 @@ public class ExecutorController : BaseController
 
     [HttpGet]
     [Authorize]
-    public async Task<IActionResult> Create(Guid id,Guid departmentId)
+    public IActionResult Create(Guid id,Guid departmentId)
     {
         var currentUserId = GetCurrentUserId();
         var users = _dataContext.Users.Where(x=>x.Id != currentUserId && x.RoleId == 3 && x.DepartmentId.Equals(departmentId)).OrderBy(x=>x.CreatedAt).ToList();

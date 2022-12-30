@@ -1,3 +1,4 @@
+using System.Data.Entity;
 using System.Security.Claims;
 using DocumentFlow.Models;
 using DocumentFlow.Models.ViewModels.Auth;
@@ -27,7 +28,7 @@ public class AuthController : BaseController
     public async Task<IActionResult> Login(AuthenticateModel model)
     {
         if (!ModelState.IsValid) return View(model);
-        var user =  _context.Users.FirstOrDefault(x=>x.Phone.Equals(model.Phone));
+        var user = await _context.Users.FirstOrDefaultAsync(x=>x.Phone.Equals(model.Phone));
         if (user == null)
         {
             ModelState.AddModelError("", "Логин или пароль не корректный!");
@@ -60,7 +61,7 @@ public class AuthController : BaseController
     }
     
     [HttpGet]
-    public async Task<IActionResult> Logout()
+    public IActionResult Logout()
     {
         return RedirectToAction("Login", "Auth");
     }
